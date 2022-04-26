@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+rootProject.name = "Terminal"
 
-rootProject.name = "Java-Terminal"
-
-
-include(":server")
-include(":client")
+include(
+    ":server",
+    ":client"
+)
 
