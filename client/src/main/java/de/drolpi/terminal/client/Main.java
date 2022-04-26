@@ -10,6 +10,9 @@ public class Main {
             .builder()
             .prompt(() -> "> ")
             .build();
+
+        TerminalClient client = new TerminalClient(console);
+        client.start();
     }
 
 }
