@@ -22,6 +22,10 @@ subprojects {
 
     dependencies {
         compileOnly("org.jetbrains:annotations:23.0.0")
+
+        implementation(files("${project.rootDir}//libs//common.jar"))
+        implementation(files("${project.rootDir}//libs//console.jar"))
+        implementation(files("${project.rootDir}//libs//console-jline3.jar"))
     }
 
     tasks.withType<JavaCompile> {
