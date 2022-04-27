@@ -14,22 +14,11 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.server.connection;
 
-import de.drolpi.terminal.client.connection.ClientConnection;
-import de.natrox.console.Console;
-import de.natrox.console.jline3.JLine3Console;
+import java.net.Socket;
 
-public class Main {
+public class ConnectionHandler {
 
-    private Main() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) throws Exception {
-        Console console = JLine3Console
-            .builder()
-            .prompt(() -> "> ")
-            .build();
-    }
+    private Socket client;
 }

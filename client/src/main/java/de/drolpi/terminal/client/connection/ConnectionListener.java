@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.client.connection;
 
-import de.drolpi.terminal.client.connection.ClientConnection;
-import de.natrox.console.Console;
-import de.natrox.console.jline3.JLine3Console;
+import java.util.function.Consumer;
 
-public class Main {
-
-    private Main() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) throws Exception {
-        Console console = JLine3Console
-            .builder()
-            .prompt(() -> "> ")
-            .build();
-    }
+public interface ConnectionListener extends Consumer<String> {
 }

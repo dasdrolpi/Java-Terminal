@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.client.connection;
 
-import de.drolpi.terminal.client.connection.ClientConnection;
-import de.natrox.console.Console;
-import de.natrox.console.jline3.JLine3Console;
+import java.io.IOException;
 
-public class Main {
+public interface Connection {
 
-    private Main() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) throws Exception {
-        Console console = JLine3Console
-            .builder()
-            .prompt(() -> "> ")
-            .build();
-    }
+    void close() throws IOException;
+    void establish() throws IOException;
+    void establishNew() throws IOException;
+    void write(String s) throws IOException;
+    boolean connected();
+    void registerHandler(ConnectionListener c);
 }
