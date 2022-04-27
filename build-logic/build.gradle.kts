@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
+plugins {
+    `kotlin-dsl`
+}
+
+repositories {
+    gradlePluginPortal()
+}
+
 dependencies {
-    implementation(project(":common"))
+    implementation("net.kyori", "indra-common", "2.1.1") {
+        exclude("org.slf4j")
+    }
 }
-
-tasks.withType<Jar> {
-    archiveFileName.set(File.client)
-}
-
-applyJarMetadata("de.drolpi.terminal.client.Main")

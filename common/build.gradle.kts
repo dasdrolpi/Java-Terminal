@@ -14,12 +14,3 @@
  * limitations under the License.
  */
 
-dependencies {
-    implementation(project(":common"))
-}
-
-tasks.withType<Jar> {
-    archiveFileName.set(File.client)
-}
-
-applyJarMetadata("de.drolpi.terminal.client.Main")

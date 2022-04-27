@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-dependencies {
-    implementation(project(":common"))
+plugins {
+    id("net.kyori.indra.git")
 }
-
-tasks.withType<Jar> {
-    archiveFileName.set(File.client)
-}
-
-applyJarMetadata("de.drolpi.terminal.client.Main")
