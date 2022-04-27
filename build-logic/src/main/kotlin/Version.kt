@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-dependencies {
+object Version {
+
+    const val name = "1.0.0-SNAPSHOT"
 
 }
-
-tasks.withType<Jar> {
-    archiveFileName.set(File.client)
-}
-
-applyJarMetadata("de.drolpi.terminal.client.Main")

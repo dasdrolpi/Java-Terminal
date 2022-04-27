@@ -27,7 +27,7 @@ fun Project.applyJarMetadata(mainClass: String) {
             manifest.attributes(
                 "Main-Class" to mainClass,
                 "Implementation-Vendor" to "Terminal",
-                "Implementation-Title" to "versionName",
+                "Implementation-Title" to "VersionName",
                 "Implementation-Version" to project.version.toString() + "-${shortCommitHash()}",
                 "Specification-Version" to project.version.toString() + "-" + System.currentTimeMillis()
             )

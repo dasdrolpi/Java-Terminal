@@ -25,7 +25,7 @@ defaultTasks("build", "shadowJar")
 
 allprojects {
     group = "de.drolpi"
-    version = "1.0.0-SNAPSHOT"
+    version = Version.name
 
     repositories {
         mavenCentral()
