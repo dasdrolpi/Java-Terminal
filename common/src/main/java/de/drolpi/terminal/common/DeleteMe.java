@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-dependencies {
-    implementation(project(":common"))
-}
+package de.drolpi.terminal.common;
 
-tasks.withType<Jar> {
-    archiveFileName.set(File.client)
+public class DeleteMe {
 }
-
-applyJarMetadata("de.drolpi.terminal.client.Main")

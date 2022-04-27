@@ -25,6 +25,7 @@ pluginManagement {
 }
 
 include(
+    ":common",
     ":server",
     ":client"
 )

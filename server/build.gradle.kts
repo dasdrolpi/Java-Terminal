@@ -14,3 +14,6 @@
  * limitations under the License.
  */
 
+dependencies {
+    implementation(project(":common"))
+}
