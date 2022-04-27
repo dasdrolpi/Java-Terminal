@@ -19,8 +19,10 @@ package de.drolpi.terminal.server.connection;
 import de.drolpi.terminal.common.connection.Connection;
 import de.drolpi.terminal.common.connection.ConnectionListener;
 
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +32,7 @@ public class ServerConnection implements Connection {
     private final Socket client;
     private final Set<ConnectionListener> listeners = new HashSet<>();
 
-    private DataOutputStream out;
+    private BufferedWriter out;
     private ServerConnectionReciever reciever;
 
     public ServerConnection(Socket client) {
@@ -50,7 +52,7 @@ public class ServerConnection implements Connection {
 
     @Override
     public void establish() throws IOException {
-        this.out = new DataOutputStream(client.getOutputStream());
+        this.out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
         this.reciever = new ServerConnectionReciever(this);
         reciever.start();
     }
@@ -60,7 +62,8 @@ public class ServerConnection implements Connection {
 
     @Override
     public void write(String s) throws IOException {
-        out.writeUTF(s);
+        out.write(s);
+        out.flush();
     }
 
     @Override

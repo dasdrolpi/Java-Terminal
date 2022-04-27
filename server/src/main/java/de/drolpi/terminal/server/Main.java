@@ -16,10 +16,10 @@
 
 package de.drolpi.terminal.server;
 
+import de.drolpi.terminal.server.connection.ServerConnectionManager;
+
 public class Main {
 
     public static void main(String[] args) {
-
     }
-
 }

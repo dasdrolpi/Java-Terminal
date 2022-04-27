@@ -16,17 +16,19 @@
 
 package de.drolpi.terminal.client.connection;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ClientConnectionReciever extends Thread {
 
     private final ClientConnection clientConnection;
-    private final DataInputStream dataInputStream;
+    private final BufferedReader in;
 
     public ClientConnectionReciever(ClientConnection clientConnection) throws IOException {
         this.clientConnection = clientConnection;
-        this.dataInputStream = new DataInputStream(clientConnection.socket().getInputStream());
+        this.in = new BufferedReader(new InputStreamReader((clientConnection.socket().getInputStream())));
     }
 
 
@@ -40,7 +42,7 @@ public class ClientConnectionReciever extends Thread {
 
     private String read() {
         try {
-            return dataInputStream.readUTF();
+            return in.readLine();
         } catch (IOException e) {
             return null;
         }

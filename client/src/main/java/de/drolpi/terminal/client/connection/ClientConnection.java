@@ -32,7 +32,7 @@ public class ClientConnection implements Connection {
 
     private ClientConnectionReciever reciever;
     private Socket socket;
-    private DataOutputStream out;
+    private BufferedWriter out;
 
     public ClientConnection(String host, int port) {
         this.host = host;
@@ -40,7 +40,8 @@ public class ClientConnection implements Connection {
     }
 
     public void write(String s) throws IOException {
-        out.writeUTF(s);
+        out.write(s);
+        out.flush();
     }
 
     public void close() {
@@ -64,14 +65,14 @@ public class ClientConnection implements Connection {
     private void establish(boolean evenIfConnected) throws IOException {
         if ((connected() && evenIfConnected) || !connected()) {
             socket = new Socket(host, port);
-            out = new DataOutputStream(socket.getOutputStream());
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             reciever = new ClientConnectionReciever(this);
             reciever.start();
         }
     }
 
     public boolean connected() {
-        return socket.isConnected();
+        return socket != null && socket.isConnected();
     }
 
     @Override

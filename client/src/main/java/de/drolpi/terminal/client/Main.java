@@ -17,8 +17,6 @@
 package de.drolpi.terminal.client;
 
 import de.drolpi.terminal.client.connection.ClientConnection;
-import de.natrox.console.Console;
-import de.natrox.console.jline3.JLine3Console;
 
 public class Main {
 

@@ -21,11 +21,14 @@ import com.sun.source.doctree.SerialTree;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
+import java.util.Set;
 
-public class ServerConnectionManager implements Runnable {
+public class ServerConnectionManager extends Thread {
 
     private int port;
     private ServerSocket socket;
+    private Set<ServerConnection> connectionSet = new HashSet<>();
 
     public ServerConnectionManager(int port) {
         this.port = port;
@@ -38,10 +41,12 @@ public class ServerConnectionManager implements Runnable {
 
     @Override
     public void run() {
-        Socket client = null;
         while (true) {
             try {
-                client = new ServerSocket().accept();
+                Socket client = socket.accept();
+                ServerConnection connection = new ServerConnection(client);
+                connection.establish();
+                connectionSet.add(connection);
             } catch (IOException ignored) {}
         }
     }

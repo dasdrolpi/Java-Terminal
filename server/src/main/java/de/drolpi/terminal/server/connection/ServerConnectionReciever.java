@@ -16,17 +16,19 @@
 
 package de.drolpi.terminal.server.connection;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ServerConnectionReciever extends Thread {
 
     private final ServerConnection serverConnection;
-    private final DataInputStream dataInputStream;
+    private final BufferedReader in;
 
     public ServerConnectionReciever(ServerConnection serverConnection) throws IOException {
         this.serverConnection = serverConnection;
-        this.dataInputStream = new DataInputStream(serverConnection.socket().getInputStream());
+        this.in = new BufferedReader(new InputStreamReader(serverConnection.socket().getInputStream()));
     }
 
     @Override
@@ -39,7 +41,7 @@ public class ServerConnectionReciever extends Thread {
 
     private String read() {
         try {
-            return dataInputStream.readUTF();
+            return in.readLine();
         } catch (IOException e) {
             return null;
         }
