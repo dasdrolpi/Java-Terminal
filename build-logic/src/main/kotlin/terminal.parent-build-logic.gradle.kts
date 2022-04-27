@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-dependencies {
-
+plugins {
+    id("net.kyori.indra.git")
 }
-
-applyJarMetadata("de.drolpi.terminal.client.Main")

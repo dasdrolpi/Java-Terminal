@@ -15,8 +15,16 @@
  */
 rootProject.name = "Terminal"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+includeBuild("build-logic")
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
 include(
     ":server",
     ":client"
 )
-

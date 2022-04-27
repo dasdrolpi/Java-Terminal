@@ -18,6 +18,7 @@ plugins {
     id("java")
     id("maven-publish")
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("terminal.parent-build-logic")
 }
 
 defaultTasks("build", "shadowJar")
