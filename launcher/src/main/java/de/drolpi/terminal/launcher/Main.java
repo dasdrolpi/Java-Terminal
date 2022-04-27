@@ -16,10 +16,12 @@
 
 package de.drolpi.terminal.launcher;
 
+import java.util.Arrays;
+
 public class Main {
 
-    public static void main(String[] args) {
-        Launcher launcher = new Launcher();
+    public static void main(String[] args) throws Exception {
+        Launcher launcher = new Launcher(Arrays.asList(args));
         launcher.start();
     }
 
