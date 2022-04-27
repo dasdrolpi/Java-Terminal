@@ -14,3 +14,12 @@
  * limitations under the License.
  */
 
+dependencies {
+
+}
+
+tasks.withType<Jar> {
+    archiveFileName.set(File.client)
+}
+
+applyJarMetadata("de.drolpi.terminal.client.Main")

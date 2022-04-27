@@ -13,19 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-rootProject.name = "Terminal"
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+object Version {
 
-includeBuild("build-logic")
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
+    const val name = "1.0.0-SNAPSHOT"
+
 }
-
-include(
-    ":server",
-    ":client",
-    ":launcher"
-)

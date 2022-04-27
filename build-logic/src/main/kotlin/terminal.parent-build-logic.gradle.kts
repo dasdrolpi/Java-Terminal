@@ -13,19 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-rootProject.name = "Terminal"
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-includeBuild("build-logic")
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
+plugins {
+    id("net.kyori.indra.git")
 }
-
-include(
-    ":server",
-    ":client",
-    ":launcher"
-)

@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-rootProject.name = "Terminal"
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-includeBuild("build-logic")
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
+plugins {
+    `kotlin-dsl`
 }
 
-include(
-    ":server",
-    ":client",
-    ":launcher"
-)
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation("net.kyori", "indra-common", "2.1.1") {
+        exclude("org.slf4j")
+    }
+}

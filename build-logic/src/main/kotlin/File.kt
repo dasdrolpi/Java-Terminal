@@ -13,19 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-rootProject.name = "Terminal"
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+object File {
 
-includeBuild("build-logic")
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
+    const val client = "client.jar"
+    const val server = "server.jar"
+
 }
-
-include(
-    ":server",
-    ":client",
-    ":launcher"
-)
