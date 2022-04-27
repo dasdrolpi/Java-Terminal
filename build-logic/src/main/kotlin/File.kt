@@ -16,6 +16,7 @@
 
 object File {
 
+    const val launcher = "launcher.jar"
     const val client = "client.jar"
     const val server = "server.jar"
 
