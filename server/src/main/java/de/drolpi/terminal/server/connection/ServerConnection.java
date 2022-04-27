@@ -14,69 +14,58 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client.connection;
+package de.drolpi.terminal.server.connection;
 
 import de.drolpi.terminal.common.connection.Connection;
 import de.drolpi.terminal.common.connection.ConnectionListener;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ClientConnection implements Connection {
+public class ServerConnection implements Connection {
 
-    private final String host;
-    private final int port;
+    private final Socket client;
     private final Set<ConnectionListener> listeners = new HashSet<>();
 
-    private ClientConnectionReciever reciever;
-    private Socket socket;
     private DataOutputStream out;
+    private ServerConnectionReciever reciever;
 
-    public ClientConnection(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public ServerConnection(Socket client) {
+        this.client = client;
     }
 
-    public void write(String s) throws IOException {
-        out.writeUTF(s);
-    }
-
+    @Override
     public void close() {
         try {
             if(connected()) {
                 out.flush();
                 out.close();
-                socket.close();
+                client.close();
             }
         } catch (Exception ignored) {}
     }
 
-    public void establishNew() throws IOException {
-        establish(true);
-    }
-
+    @Override
     public void establish() throws IOException {
-        establish(false);
+        this.out = new DataOutputStream(client.getOutputStream());
+        this.reciever = new ServerConnectionReciever(this);
+        reciever.start();
     }
 
-    private void establish(boolean evenIfConnected) throws IOException {
-        if ((connected() && evenIfConnected) || !connected()) {
-            socket = new Socket(host, port);
-            out = new DataOutputStream(socket.getOutputStream());
-            reciever = new ClientConnectionReciever(this);
-            reciever.start();
-        }
-    }
+    @Override @Deprecated
+    public void establishNew() throws IOException {}
 
-    public boolean connected() {
-        return socket.isConnected();
+    @Override
+    public void write(String s) throws IOException {
+        out.writeUTF(s);
     }
 
     @Override
-    public void registerHandler(ConnectionListener c) {
-        listeners.add(c);
+    public boolean connected() {
+        return false;
     }
 
     @Override
@@ -86,7 +75,12 @@ public class ClientConnection implements Connection {
     }
 
     @Override
+    public void registerHandler(ConnectionListener c) {
+        listeners.add(c);
+    }
+
+    @Override
     public Socket socket() {
-        return socket;
+        return client;
     }
 }

@@ -16,9 +16,33 @@
 
 package de.drolpi.terminal.server.connection;
 
+import com.sun.source.doctree.SerialTree;
+
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ConnectionHandler {
+public class ServerConnectionManager implements Runnable {
 
-    private Socket client;
+    private int port;
+    private ServerSocket socket;
+
+    public ServerConnectionManager(int port) {
+        this.port = port;
+        try {
+            this.socket = new ServerSocket(port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void run() {
+        Socket client = null;
+        while (true) {
+            try {
+                client = new ServerSocket().accept();
+            } catch (IOException ignored) {}
+        }
+    }
 }

@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client.connection;
+package de.drolpi.terminal.common.connection;
 
-import java.util.function.Consumer;
+import java.io.IOException;
+import java.net.Socket;
 
-public interface ConnectionListener extends Consumer<String> {
+public interface Connection {
+
+    void close();
+    void establish() throws IOException;
+    void establishNew() throws IOException;
+    void write(String s) throws IOException;
+    boolean connected();
+    void registerHandler(ConnectionListener c);
+    void callListeners(String s);
+    Socket socket();
 }
