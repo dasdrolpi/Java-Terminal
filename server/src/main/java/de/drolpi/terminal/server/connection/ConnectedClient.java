@@ -18,6 +18,8 @@ package de.drolpi.terminal.server.connection;
 
 import de.drolpi.terminal.common.connection.Connection;
 import de.drolpi.terminal.common.connection.ConnectionListener;
+import de.natrox.common.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,19 +31,15 @@ import java.util.UUID;
 
 public class ConnectedClient implements Connection {
 
-    private final Socket client;
-    private final Map<UUID, ConnectionListener> listeners = new HashMap<>();
     private final UUID uniqueId;
+    private final Socket client;
+    private final PrintWriter out;
 
-    private PrintWriter out;
+    private final Map<UUID, ConnectionListener> listeners = new HashMap<>();
 
-    ConnectedClient(Socket client, UUID uniqueId) {
+    ConnectedClient(Socket client, UUID uniqueId) throws IOException {
         this.client = client;
         this.uniqueId = uniqueId;
-    }
-
-    @Override
-    public void establish() throws IOException {
         this.out = new PrintWriter(this.client.getOutputStream(), true);
         ServerInputReceiveThread receiver = new ServerInputReceiveThread(this);
         receiver.start();
@@ -60,24 +58,29 @@ public class ConnectedClient implements Connection {
     }
 
     @Override
-    public void write(String message) {
+    public void write(@NotNull String message) {
+        Check.notNull(message, "message");
         this.out.println(message);
     }
 
     @Override
-    public UUID registerListener(ConnectionListener listener) {
+    public @NotNull UUID registerListener(@NotNull ConnectionListener listener) {
+        Check.notNull(listener, "listener");
         UUID uniqueId = UUID.randomUUID();
         this.registerListener(uniqueId, listener);
         return uniqueId;
     }
 
     @Override
-    public void registerListener(UUID uniqueId, ConnectionListener listener) {
+    public void registerListener(@NotNull UUID uniqueId, @NotNull ConnectionListener listener) {
+        Check.notNull(uniqueId, "uniqueId");
+        Check.notNull(listener, "listener");
         this.listeners.put(uniqueId, listener);
     }
 
     @Override
-    public void unregisterListener(UUID uniqueId) {
+    public void unregisterListener(@NotNull UUID uniqueId) {
+        Check.notNull(uniqueId, "uniqueId");
         this.listeners.remove(uniqueId);
     }
 
@@ -87,12 +90,12 @@ public class ConnectedClient implements Connection {
     }
 
     @Override
-    public Set<UUID> listeners() {
+    public @NotNull Set<UUID> listeners() {
         return this.listeners.keySet();
     }
 
     @Override
-    public Socket socket() {
+    public @NotNull Socket socket() {
         return this.client;
     }
 

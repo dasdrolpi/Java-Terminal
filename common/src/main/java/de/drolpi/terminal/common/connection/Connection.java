@@ -16,6 +16,8 @@
 
 package de.drolpi.terminal.common.connection;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Set;
@@ -23,22 +25,20 @@ import java.util.UUID;
 
 public interface Connection {
 
-    void establish() throws IOException;
-
     void close();
 
-    void write(String message) throws IOException;
+    void write(@NotNull String message) throws IOException;
 
-    UUID registerListener(ConnectionListener listener);
+    @NotNull UUID registerListener(@NotNull ConnectionListener listener);
 
-    void registerListener(UUID uniqueId, ConnectionListener listener);
+    void registerListener(@NotNull UUID uniqueId, @NotNull ConnectionListener listener);
 
-    void unregisterListener(UUID uniqueId);
+    void unregisterListener(@NotNull UUID uniqueId);
 
     boolean connected();
 
-    Socket socket();
+    @NotNull Socket socket();
 
-    Set<UUID> listeners();
+    @NotNull Set<UUID> listeners();
 
 }

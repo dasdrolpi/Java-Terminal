@@ -28,12 +28,8 @@ public class ServerClientManager extends Thread {
     private final ServerSocket socket;
     private final Map<UUID, ConnectedClient> connectionSet = new HashMap<>();
 
-    public ServerClientManager(int port) {
-        try {
-            this.socket = new ServerSocket(port);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public ServerClientManager(int port) throws IOException {
+        this.socket = new ServerSocket(port);
     }
 
     @Override
@@ -43,9 +39,9 @@ public class ServerClientManager extends Thread {
                 Socket client = this.socket.accept();
                 UUID uniqueId = UUID.randomUUID();
                 ConnectedClient connection = new ConnectedClient(client, uniqueId);
-                connection.establish();
                 this.connectionSet.put(uniqueId, connection);
             } catch (IOException ignored) {
+
             }
         }
     }
