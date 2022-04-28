@@ -34,14 +34,12 @@ public class ClientConnectionReciever extends Thread {
     public void run() {
         String line;
         while (!Thread.interrupted() && (line = read()) != null) {
-            System.out.println("call handlers");
             clientConnection.callHandlers(line);
         }
     }
 
     private String read() {
         try {
-            System.out.println("waiting for incoming line");
             return in.readLine();
         } catch (IOException e) {
             return null;

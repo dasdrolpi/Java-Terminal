@@ -53,18 +53,10 @@ public class ServerConnection implements Connection {
         this.out = new PrintWriter(client.getOutputStream(), true);
         this.reciever = new ServerConnectionReciever(this);
         reciever.start();
-        System.out.println("Sending message to client "+id());
-        write("Hi Client!");
     }
 
     public void write(String s) throws IOException {
-        try {
-            Thread.sleep(5000);
-            out.println(s);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("sent");
+        out.println(s);
     }
 
     @Override

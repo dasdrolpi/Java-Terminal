@@ -16,9 +16,6 @@
 
 package de.drolpi.terminal.client;
 
-import de.drolpi.terminal.client.connection.ClientConnection;
-import de.drolpi.terminal.client.connection.PrintListener;
-
 public class Main {
 
     private Main() {
@@ -26,8 +23,5 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        ClientConnection connection = new ClientConnection("localhost", 5153);
-        connection.registerHandler("print", new PrintListener());
-        connection.establish();
     }
 }
