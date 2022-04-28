@@ -16,29 +16,7 @@
 
 package de.drolpi.terminal.common.connection;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.function.Consumer;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.util.Set;
-import java.util.UUID;
-
-public interface Connection {
-
-    void close();
-
-    void write(@NotNull String message) throws IOException;
-
-    @NotNull UUID registerListener(@NotNull ConnectionListener listener);
-
-    void registerListener(@NotNull UUID uniqueId, @NotNull ConnectionListener listener);
-
-    void unregisterListener(@NotNull UUID uniqueId);
-
-    boolean connected();
-
-    @NotNull Socket socket();
-
-    @NotNull Set<UUID> listeners();
-
+public interface ReceiveListener extends Consumer<String> {
 }

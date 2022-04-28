@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.server.connection;
+package de.drolpi.terminal.client.connection;
 
-import de.drolpi.terminal.common.connection.Connectable;
-import de.drolpi.terminal.common.connection.ListenerRegistrable;
 import de.drolpi.terminal.common.connection.ReceiveListener;
 import de.natrox.common.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -30,19 +28,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public final class ConnectedClient implements Connectable, ListenerRegistrable<ReceiveListener> {
+final class ClientImpl implements Client {
 
-    private final UUID uniqueId;
-    private final Socket client;
+    private final Socket socket;
     private final PrintWriter out;
 
     private final Map<UUID, ReceiveListener> listeners = new HashMap<>();
 
-    ConnectedClient(Socket client, UUID uniqueId) throws IOException {
-        this.client = client;
-        this.uniqueId = uniqueId;
-        this.out = new PrintWriter(this.client.getOutputStream(), true);
-        ServerInputReceiveThread receiver = new ServerInputReceiveThread(this);
+    ClientImpl(String host, int port) throws IOException {
+        this.socket = new Socket(host, port);
+        this.out = new PrintWriter(this.socket.getOutputStream());
+        ClientInputReceiveThread receiver = new ClientInputReceiveThread(this);
         receiver.start();
     }
 
@@ -52,7 +48,7 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
             if (!this.connected())
                 return;
             this.out.close();
-            this.client.close();
+            this.socket.close();
         } catch (Exception ignored) {
 
         }
@@ -87,7 +83,7 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
 
     @Override
     public boolean connected() {
-        return this.client.isConnected();
+        return this.socket != null && this.socket.isConnected();
     }
 
     @Override
@@ -97,16 +93,12 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
 
     @Override
     public @NotNull Socket socket() {
-        return this.client;
+        return this.socket;
     }
 
-    public void callHandlers(String input) {
+    protected void callListeners(String input) {
         for (ReceiveListener listener : this.listeners.values()) {
             listener.accept(input);
         }
-    }
-
-    public UUID uniqueId() {
-        return this.uniqueId;
     }
 }

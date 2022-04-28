@@ -16,13 +16,21 @@
 
 package de.drolpi.terminal.client;
 
-public class Main {
+import de.drolpi.terminal.client.connection.Client;
+
+import java.io.IOException;
+
+public final class Main {
 
     private Main() {
         throw new UnsupportedOperationException();
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException {
+        Client client = Client.create("127.0.0.1", 8888);
+        client.registerListener(input -> {
+            System.out.println("Received: " + input);
+        });
+        client.write("Test");
     }
 }

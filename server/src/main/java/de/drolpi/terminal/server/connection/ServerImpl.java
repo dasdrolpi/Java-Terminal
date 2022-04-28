@@ -16,19 +16,25 @@
 
 package de.drolpi.terminal.server.connection;
 
+import de.natrox.common.validate.Check;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
-public class ServerClientManager extends Thread {
+final class ServerImpl extends Thread implements Server {
 
     private final ServerSocket socket;
-    private final Map<UUID, ConnectedClient> connectionSet = new HashMap<>();
 
-    public ServerClientManager(int port) throws IOException {
+    private final Map<UUID, ConnectedClient> connectionSet = new HashMap<>();
+    private final Map<UUID, ServerReceiveListener> listeners = new HashMap<>();
+
+    public ServerImpl(int port) throws IOException {
         this.socket = new ServerSocket(port);
     }
 
@@ -43,6 +49,35 @@ public class ServerClientManager extends Thread {
             } catch (IOException ignored) {
 
             }
+        }
+    }
+
+    @Override
+    public void registerListener(@NotNull UUID uniqueId, @NotNull ServerReceiveListener listener) {
+        Check.notNull(uniqueId, "uniqueId");
+        Check.notNull(listener, "listener");
+        this.listeners.put(uniqueId, listener);
+    }
+
+    @Override
+    public void unregisterListener(@NotNull UUID uniqueId) {
+        Check.notNull(uniqueId, "uniqueId");
+        this.listeners.remove(uniqueId);
+    }
+
+    @Override
+    public @NotNull ServerSocket socket() {
+        return this.socket;
+    }
+
+    @Override
+    public @NotNull Set<UUID> listeners() {
+        return listeners.keySet();
+    }
+
+    protected void callListeners(ConnectedClient connectedClient, String input) {
+        for (ServerReceiveListener listener : this.listeners.values()) {
+            listener.accept(connectedClient, input);
         }
     }
 }

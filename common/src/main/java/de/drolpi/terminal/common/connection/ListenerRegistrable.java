@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.server;
+package de.drolpi.terminal.common.connection;
 
-import de.drolpi.terminal.server.connection.Server;
+import de.natrox.common.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
+import java.util.UUID;
 
-public class Main {
+public interface ListenerRegistrable<T> {
 
-    public static void main(String[] args) throws IOException {
-        Server server = Server.create(8888);
-        server.registerListener((connectedClient, input) -> {
-            connectedClient.write("Back: " + input);
-        });
-        server.start();
+    void registerListener(@NotNull UUID uniqueId, @NotNull T listener);
+
+    default @NotNull UUID registerListener(@NotNull T listener) {
+        Check.notNull(listener, "listener");
+        UUID uniqueId = UUID.randomUUID();
+        this.registerListener(uniqueId, listener);
+        return uniqueId;
     }
+
+    void unregisterListener(@NotNull UUID uniqueId);
+
 }

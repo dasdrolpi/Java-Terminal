@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.server;
+package de.drolpi.terminal.server.connection;
 
-import de.drolpi.terminal.server.connection.Server;
+import java.util.function.BiConsumer;
 
-import java.io.IOException;
-
-public class Main {
-
-    public static void main(String[] args) throws IOException {
-        Server server = Server.create(8888);
-        server.registerListener((connectedClient, input) -> {
-            connectedClient.write("Back: " + input);
-        });
-        server.start();
-    }
+public interface ServerReceiveListener extends BiConsumer<ConnectedClient, String> {
 }

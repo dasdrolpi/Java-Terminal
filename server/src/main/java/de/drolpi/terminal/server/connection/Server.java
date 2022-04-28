@@ -14,9 +14,26 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.common.connection;
+package de.drolpi.terminal.server.connection;
 
-import java.util.function.Consumer;
+import de.drolpi.terminal.common.connection.ListenerRegistrable;
+import org.jetbrains.annotations.NotNull;
 
-public interface ConnectionListener extends Consumer<String> {
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.Set;
+import java.util.UUID;
+
+public sealed interface Server extends ListenerRegistrable<ServerReceiveListener> permits ServerImpl {
+
+    static @NotNull Server create(int port) throws IOException {
+        return new ServerImpl(port);
+    }
+
+    void start();
+
+    @NotNull ServerSocket socket();
+
+    @NotNull Set<UUID> listeners();
+
 }

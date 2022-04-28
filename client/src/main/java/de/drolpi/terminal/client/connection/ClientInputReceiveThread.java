@@ -22,19 +22,19 @@ import java.io.InputStreamReader;
 
 final class ClientInputReceiveThread extends Thread {
 
-    private final Client client;
+    private final ClientImpl clientImpl;
     private final BufferedReader in;
 
-    ClientInputReceiveThread(Client client) throws IOException {
-        this.client = client;
-        this.in = new BufferedReader(new InputStreamReader(client.socket().getInputStream()));
+    ClientInputReceiveThread(ClientImpl clientImpl) throws IOException {
+        this.clientImpl = clientImpl;
+        this.in = new BufferedReader(new InputStreamReader(clientImpl.socket().getInputStream()));
     }
 
     @Override
     public void run() {
-        String line;
-        while (!Thread.interrupted() && (line = this.read()) != null) {
-            this.client.callListeners(line);
+        String input;
+        while (!Thread.interrupted() && (input = this.read()) != null) {
+            this.clientImpl.callListeners(input);
         }
     }
 

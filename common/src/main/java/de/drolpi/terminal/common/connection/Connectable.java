@@ -16,7 +16,23 @@
 
 package de.drolpi.terminal.common.connection;
 
-import java.util.function.BiConsumer;
+import org.jetbrains.annotations.NotNull;
 
-public interface ServerGlobalConnectionListener extends BiConsumer<String, String> {
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Set;
+import java.util.UUID;
+
+public interface Connectable {
+
+    void close();
+
+    void write(@NotNull String message) throws IOException;
+
+    boolean connected();
+
+    @NotNull Socket socket();
+
+    @NotNull Set<UUID> listeners();
+
 }
