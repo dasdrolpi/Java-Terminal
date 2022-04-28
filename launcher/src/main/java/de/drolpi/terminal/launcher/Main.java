@@ -21,6 +21,7 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("client.dev", "true");
         Launcher launcher = new Launcher(Arrays.asList(args));
         launcher.start();
     }
