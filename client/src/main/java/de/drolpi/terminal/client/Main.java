@@ -22,6 +22,7 @@ public class Main {
         throw new UnsupportedOperationException();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+
     }
 }

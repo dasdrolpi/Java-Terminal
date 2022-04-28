@@ -23,16 +23,22 @@ import java.util.UUID;
 
 public interface Connection {
 
-    void close();
     void establish() throws IOException;
-    void write(String s) throws IOException;
+
+    void close();
+
+    void write(String message) throws IOException;
+
+    UUID registerListener(ConnectionListener listener);
+
+    void registerListener(UUID uniqueId, ConnectionListener listener);
+
+    void unregisterListener(UUID uniqueId);
+
     boolean connected();
-    void callHandlers(String s);
-    UUID registerHandler(ConnectionListener c);
-    void registerHandler(UUID uniqueId, ConnectionListener c);
-    void unregisterHandler(UUID uniqueId);
-    Set<UUID> handlers();
+
     Socket socket();
-    String id();
+
+    Set<UUID> listeners();
 
 }

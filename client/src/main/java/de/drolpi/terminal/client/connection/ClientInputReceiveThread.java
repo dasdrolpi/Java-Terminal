@@ -20,27 +20,27 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ClientConnectionReciever extends Thread {
+final class ClientInputReceiveThread extends Thread {
 
-    private final ClientConnection clientConnection;
-    private BufferedReader in;
+    private final Client client;
+    private final BufferedReader in;
 
-    public ClientConnectionReciever(ClientConnection clientConnection) throws IOException {
-        this.clientConnection = clientConnection;
-        this.in = new BufferedReader(new InputStreamReader((clientConnection.socket().getInputStream())));
+    ClientInputReceiveThread(Client client) throws IOException {
+        this.client = client;
+        this.in = new BufferedReader(new InputStreamReader(client.socket().getInputStream()));
     }
 
     @Override
     public void run() {
         String line;
-        while (!Thread.interrupted() && (line = read()) != null) {
-            clientConnection.callHandlers(line);
+        while (!Thread.interrupted() && (line = this.read()) != null) {
+            this.client.callListeners(line);
         }
     }
 
     private String read() {
         try {
-            return in.readLine();
+            return this.in.readLine();
         } catch (IOException e) {
             return null;
         }

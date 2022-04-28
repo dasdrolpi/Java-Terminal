@@ -16,21 +16,19 @@
 
 package de.drolpi.terminal.server.connection;
 
-import com.sun.source.doctree.SerialTree;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-public class ServerConnectionManager extends Thread {
+public class ServerClientManager extends Thread {
 
     private final ServerSocket socket;
-    private final Map<String, ServerConnection> connectionSet = new HashMap<>();
-    private short nextID;
+    private final Map<UUID, ConnectedClient> connectionSet = new HashMap<>();
 
-    public ServerConnectionManager(int port) {
+    public ServerClientManager(int port) {
         try {
             this.socket = new ServerSocket(port);
         } catch (IOException e) {
@@ -42,23 +40,13 @@ public class ServerConnectionManager extends Thread {
     public void run() {
         while (true) {
             try {
-                Socket client = socket.accept();
-                String id = getID(100);
-                ServerConnection connection = new ServerConnection(client, id);
+                Socket client = this.socket.accept();
+                UUID uniqueId = UUID.randomUUID();
+                ConnectedClient connection = new ConnectedClient(client, uniqueId);
                 connection.establish();
-                connectionSet.put(id, connection);
-            } catch (IOException ignored) {}
+                this.connectionSet.put(uniqueId, connection);
+            } catch (IOException ignored) {
+            }
         }
-    }
-
-    private String getID(int calls) {
-        if(calls < 1)
-            throw new StackOverflowError();
-        if(connectionSet.containsKey(nextID)) {
-            nextID++;
-            return getID(calls-1);
-        }
-        nextID++;
-        return String.valueOf(nextID-1);
     }
 }
