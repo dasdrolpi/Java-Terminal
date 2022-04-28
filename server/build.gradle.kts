@@ -17,3 +17,8 @@
 dependencies {
     implementation(project(":common"))
 }
+tasks.withType<Jar> {
+    archiveFileName.set(File.server)
+}
+
+applyJarMetadata("de.drolpi.terminal.server.Main")

@@ -27,5 +27,6 @@ pluginManagement {
 include(
     ":common",
     ":server",
-    ":client"
+    ":client",
+    ":launcher"
 )

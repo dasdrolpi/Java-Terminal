@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-object File {
+package de.drolpi.terminal.launcher;
 
-    const val launcher = "launcher.jar"
-    const val client = "client.jar"
-    const val server = "server.jar"
+import org.jetbrains.annotations.NotNull;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
+final class LauncherClassLoader extends URLClassLoader {
+
+    static {
+        ClassLoader.registerAsParallelCapable();
+    }
+
+    public LauncherClassLoader(@NotNull URL... urls) {
+        super(urls, ClassLoader.getSystemClassLoader());
+    }
 }

@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-object File {
-
-    const val launcher = "launcher.jar"
-    const val client = "client.jar"
-    const val server = "server.jar"
-
+tasks.withType<Jar> {
+    archiveFileName.set(File.launcher)
 }
+
+applyJarMetadata("de.drolpi.terminal.launcher.Main")

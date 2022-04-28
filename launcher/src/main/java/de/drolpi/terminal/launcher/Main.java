@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-object File {
+package de.drolpi.terminal.launcher;
 
-    const val launcher = "launcher.jar"
-    const val client = "client.jar"
-    const val server = "server.jar"
+import java.util.Arrays;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        System.setProperty("client.dev", "true");
+        Launcher launcher = new Launcher(Arrays.asList(args));
+        launcher.start();
+    }
 
 }
