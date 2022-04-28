@@ -35,7 +35,7 @@ public class ClientConnection implements Connection {
     private Socket socket;
 
     private ClientConnectionReciever reciever;
-    private BufferedWriter out;
+    private PrintWriter out;
 
     public ClientConnection(String host, int port) {
         this.host = host;
@@ -45,7 +45,7 @@ public class ClientConnection implements Connection {
 
     @Override
     public void write(String s) throws IOException {
-        out.write(s);
+        out.println(s);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ClientConnection implements Connection {
             socket = new Socket(host, port);
             reciever = new ClientConnectionReciever(this);
             reciever.start();
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            out = new PrintWriter(socket.getOutputStream());
         }
     }
 

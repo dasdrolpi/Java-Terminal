@@ -32,7 +32,7 @@ public class ServerConnection implements Connection {
     private final Map<String, ConnectionListener> listeners = new HashMap<>();
     private final String id;
 
-    private BufferedWriter out;
+    private PrintWriter out;
     private ServerConnectionReciever reciever;
 
     public ServerConnection(Socket client, String id) {
@@ -50,7 +50,7 @@ public class ServerConnection implements Connection {
     }
 
     public void establish() throws IOException {
-        this.out = new BufferedWriter(new PrintWriter(client.getOutputStream(), true));
+        this.out = new PrintWriter(client.getOutputStream(), true);
         this.reciever = new ServerConnectionReciever(this);
         reciever.start();
         System.out.println("Sending message to client "+id());
@@ -60,7 +60,7 @@ public class ServerConnection implements Connection {
     public void write(String s) throws IOException {
         try {
             Thread.sleep(5000);
-            out.write(s);
+            out.println(s);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
