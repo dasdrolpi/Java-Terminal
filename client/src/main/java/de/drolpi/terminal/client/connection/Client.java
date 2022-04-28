@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public interface Client extends Connectable, ListenerRegistrable<ReceiveListener> {
+public sealed interface Client extends Connectable, ListenerRegistrable<ReceiveListener> permits ClientImpl {
 
     static @NotNull Client create(@NotNull String host, int port) throws IOException {
         Check.notNull(host, "host");
