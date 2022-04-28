@@ -14,3 +14,8 @@
  * limitations under the License.
  */
 
+tasks.withType<Jar> {
+    archiveFileName.set(File.launcher)
+}
+
+applyJarMetadata("de.drolpi.terminal.launcher.Main")

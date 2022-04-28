@@ -15,7 +15,7 @@
  */
 
 tasks.withType<Jar> {
-    archiveFileName.set(File.client)
+    archiveFileName.set(File.server)
 }
 
-applyJarMetadata("de.drolpi.terminal.launcher.Main")
+applyJarMetadata("de.drolpi.terminal.server.Main")
