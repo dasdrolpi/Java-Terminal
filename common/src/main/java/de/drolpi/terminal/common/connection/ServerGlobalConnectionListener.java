@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.common.connection;
 
-import de.drolpi.terminal.client.connection.ClientConnection;
-import de.drolpi.terminal.client.connection.PrintListener;
+import java.util.function.BiConsumer;
 
-public class Main {
-
-    private Main() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) throws Exception {
-        ClientConnection connection = new ClientConnection("localhost", 5153);
-        connection.registerHandler("print", new PrintListener());
-        connection.establish();
-    }
+public interface ServerGlobalConnectionListener extends BiConsumer<String, String> {
 }

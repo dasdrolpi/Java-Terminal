@@ -21,53 +21,50 @@ import de.drolpi.terminal.common.connection.ConnectionListener;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ClientConnection implements Connection {
 
     private final String host;
     private final int port;
-    private final Set<ConnectionListener> listeners = new HashSet<>();
+    private final Map<String, ConnectionListener> listeners = new HashMap<>();
+    private final String id;
+    private Socket socket;
 
     private ClientConnectionReciever reciever;
-    private Socket socket;
     private BufferedWriter out;
 
     public ClientConnection(String host, int port) {
         this.host = host;
         this.port = port;
+        id = host+':'+port;
     }
 
+    @Override
     public void write(String s) throws IOException {
         out.write(s);
-        out.flush();
     }
 
+    @Override
     public void close() {
         try {
             if(connected()) {
-                out.flush();
                 out.close();
                 socket.close();
             }
         } catch (Exception ignored) {}
     }
 
-    public void establishNew() throws IOException {
-        establish(true);
-    }
-
+    @Override
     public void establish() throws IOException {
-        establish(false);
-    }
-
-    private void establish(boolean evenIfConnected) throws IOException {
-        if ((connected() && evenIfConnected) || !connected()) {
+        if (!connected()) {
             socket = new Socket(host, port);
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             reciever = new ClientConnectionReciever(this);
             reciever.start();
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         }
     }
 
@@ -76,18 +73,33 @@ public class ClientConnection implements Connection {
     }
 
     @Override
-    public void registerHandler(ConnectionListener c) {
-        listeners.add(c);
+    public void callHandlers(String s) {
+        for (ConnectionListener listener : listeners.values())
+            listener.accept(s);
     }
 
     @Override
-    public void callListeners(String s) {
-        for (ConnectionListener listener : listeners)
-            listener.accept(s);
+    public void registerHandler(String id, ConnectionListener c) {
+        listeners.put(id, c);
+    }
+
+    @Override
+    public void unregisterHandler(String id) {
+        listeners.remove(id);
+    }
+
+    @Override
+    public Set<String> handlers() {
+        return null;
     }
 
     @Override
     public Socket socket() {
         return socket;
+    }
+
+    @Override
+    public String id() {
+        return id;
     }
 }

@@ -21,5 +21,7 @@ import de.drolpi.terminal.server.connection.ServerConnectionManager;
 public class Main {
 
     public static void main(String[] args) {
+        ServerConnectionManager man = new ServerConnectionManager(5153);
+        man.start();
     }
 }

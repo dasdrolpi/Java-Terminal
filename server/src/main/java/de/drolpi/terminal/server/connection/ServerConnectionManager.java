@@ -21,17 +21,16 @@ import com.sun.source.doctree.SerialTree;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerConnectionManager extends Thread {
 
-    private int port;
-    private ServerSocket socket;
-    private Set<ServerConnection> connectionSet = new HashSet<>();
+    private final ServerSocket socket;
+    private final Map<String, ServerConnection> connectionSet = new HashMap<>();
+    private short nextID;
 
     public ServerConnectionManager(int port) {
-        this.port = port;
         try {
             this.socket = new ServerSocket(port);
         } catch (IOException e) {
@@ -44,10 +43,22 @@ public class ServerConnectionManager extends Thread {
         while (true) {
             try {
                 Socket client = socket.accept();
-                ServerConnection connection = new ServerConnection(client);
+                String id = getID(100);
+                ServerConnection connection = new ServerConnection(client, id);
                 connection.establish();
-                connectionSet.add(connection);
+                connectionSet.put(id, connection);
             } catch (IOException ignored) {}
         }
+    }
+
+    private String getID(int calls) {
+        if(calls < 1)
+            throw new StackOverflowError();
+        if(connectionSet.containsKey(nextID)) {
+            nextID++;
+            return getID(calls-1);
+        }
+        nextID++;
+        return String.valueOf(nextID-1);
     }
 }

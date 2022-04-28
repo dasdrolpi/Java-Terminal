@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.client.connection;
 
-import de.drolpi.terminal.client.connection.ClientConnection;
-import de.drolpi.terminal.client.connection.PrintListener;
+import de.drolpi.terminal.common.connection.ConnectionListener;
 
-public class Main {
+public class PrintListener implements ConnectionListener {
 
-    private Main() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) throws Exception {
-        ClientConnection connection = new ClientConnection("localhost", 5153);
-        connection.registerHandler("print", new PrintListener());
-        connection.establish();
+    @Override
+    public void accept(String s) {
+        System.out.println(s);
     }
 }

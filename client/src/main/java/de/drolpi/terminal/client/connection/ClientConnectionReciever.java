@@ -17,31 +17,31 @@
 package de.drolpi.terminal.client.connection;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ClientConnectionReciever extends Thread {
 
     private final ClientConnection clientConnection;
-    private final BufferedReader in;
+    private BufferedReader in;
 
     public ClientConnectionReciever(ClientConnection clientConnection) throws IOException {
         this.clientConnection = clientConnection;
         this.in = new BufferedReader(new InputStreamReader((clientConnection.socket().getInputStream())));
     }
 
-
     @Override
     public void run() {
         String line;
         while (!Thread.interrupted() && (line = read()) != null) {
-            clientConnection.callListeners(line);
+            System.out.println("call handlers");
+            clientConnection.callHandlers(line);
         }
     }
 
     private String read() {
         try {
+            System.out.println("waiting for incoming line");
             return in.readLine();
         } catch (IOException e) {
             return null;

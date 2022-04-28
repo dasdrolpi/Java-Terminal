@@ -17,4 +17,5 @@
 package de.drolpi.terminal.common;
 
 public class DeleteMe {
+    //TODO: Delete this (2022/04/28)
 }

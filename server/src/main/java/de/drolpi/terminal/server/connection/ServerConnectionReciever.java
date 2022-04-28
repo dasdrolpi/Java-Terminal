@@ -17,7 +17,6 @@
 package de.drolpi.terminal.server.connection;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -35,7 +34,7 @@ public class ServerConnectionReciever extends Thread {
     public void run() {
         String line;
         while (!Thread.interrupted() && (line = read()) != null) {
-            serverConnection.callListeners(line);
+            serverConnection.callHandlers(line);
         }
     }
 
@@ -43,6 +42,7 @@ public class ServerConnectionReciever extends Thread {
         try {
             return in.readLine();
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }

@@ -18,15 +18,19 @@ package de.drolpi.terminal.common.connection;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Set;
 
 public interface Connection {
 
     void close();
     void establish() throws IOException;
-    void establishNew() throws IOException;
     void write(String s) throws IOException;
     boolean connected();
-    void registerHandler(ConnectionListener c);
-    void callListeners(String s);
+    void callHandlers(String s);
+    void registerHandler(String id, ConnectionListener c);
+    void unregisterHandler(String id);
+    Set<String> handlers();
     Socket socket();
+    String id();
+
 }

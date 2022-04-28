@@ -20,70 +20,85 @@ import de.drolpi.terminal.common.connection.Connection;
 import de.drolpi.terminal.common.connection.ConnectionListener;
 
 import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ServerConnection implements Connection {
 
+
     private final Socket client;
-    private final Set<ConnectionListener> listeners = new HashSet<>();
+    private final Map<String, ConnectionListener> listeners = new HashMap<>();
+    private final String id;
 
     private BufferedWriter out;
     private ServerConnectionReciever reciever;
 
-    public ServerConnection(Socket client) {
+    public ServerConnection(Socket client, String id) {
         this.client = client;
+        this.id = id;
     }
 
-    @Override
     public void close() {
         try {
             if(connected()) {
-                out.flush();
                 out.close();
                 client.close();
             }
         } catch (Exception ignored) {}
     }
 
-    @Override
     public void establish() throws IOException {
-        this.out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+        this.out = new BufferedWriter(new PrintWriter(client.getOutputStream(), true));
         this.reciever = new ServerConnectionReciever(this);
         reciever.start();
+        System.out.println("Sending message to client "+id());
+        write("Hi Client!");
     }
 
-    @Override @Deprecated
-    public void establishNew() throws IOException {}
-
-    @Override
     public void write(String s) throws IOException {
-        out.write(s);
-        out.flush();
+        try {
+            Thread.sleep(5000);
+            out.write(s);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("sent");
     }
 
     @Override
     public boolean connected() {
-        return false;
+        return client.isConnected();
     }
 
-    @Override
-    public void callListeners(String s) {
-        for (ConnectionListener listener : listeners)
+    public void callHandlers(String s) {
+        for (ConnectionListener listener : listeners.values())
             listener.accept(s);
     }
 
     @Override
-    public void registerHandler(ConnectionListener c) {
-        listeners.add(c);
+    public void registerHandler(String id, ConnectionListener c) {
+        listeners.put(id, c);
+    }
+
+    @Override
+    public void unregisterHandler(String id) {
+        listeners.remove(id);
+    }
+
+    @Override
+    public Set<String> handlers() {
+        return listeners.keySet();
     }
 
     @Override
     public Socket socket() {
         return client;
+    }
+
+    @Override
+    public String id() {
+        return id;
     }
 }
