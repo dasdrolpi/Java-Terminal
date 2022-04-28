@@ -19,6 +19,7 @@ package de.drolpi.terminal.common.connection;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Set;
+import java.util.UUID;
 
 public interface Connection {
 
@@ -27,9 +28,10 @@ public interface Connection {
     void write(String s) throws IOException;
     boolean connected();
     void callHandlers(String s);
-    void registerHandler(String id, ConnectionListener c);
-    void unregisterHandler(String id);
-    Set<String> handlers();
+    UUID registerHandler(ConnectionListener c);
+    void registerHandler(UUID uniqueId, ConnectionListener c);
+    void unregisterHandler(UUID uniqueId);
+    Set<UUID> handlers();
     Socket socket();
     String id();
 

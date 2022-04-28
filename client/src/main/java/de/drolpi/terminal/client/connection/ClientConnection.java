@@ -25,12 +25,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class ClientConnection implements Connection {
 
     private final String host;
     private final int port;
-    private final Map<String, ConnectionListener> listeners = new HashMap<>();
+    private final Map<UUID, ConnectionListener> listeners = new HashMap<>();
     private final String id;
     private Socket socket;
 
@@ -79,17 +80,24 @@ public class ClientConnection implements Connection {
     }
 
     @Override
-    public void registerHandler(String id, ConnectionListener c) {
-        listeners.put(id, c);
+    public UUID registerHandler(ConnectionListener c) {
+        UUID uniqueId = UUID.randomUUID();
+        this.registerHandler(uniqueId, c);
+        return uniqueId;
     }
 
     @Override
-    public void unregisterHandler(String id) {
-        listeners.remove(id);
+    public void registerHandler(UUID uniqueId, ConnectionListener c) {
+        listeners.put(uniqueId, c);
     }
 
     @Override
-    public Set<String> handlers() {
+    public void unregisterHandler(UUID uniqueId) {
+        listeners.remove(uniqueId);
+    }
+
+    @Override
+    public Set<UUID> handlers() {
         return null;
     }
 
