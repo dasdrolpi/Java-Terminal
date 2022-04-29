@@ -81,4 +81,8 @@ final class ServerImpl extends Thread implements Server {
             listener.accept(connectedClient, input);
         }
     }
+
+    public void removeClient(UUID uuid) {
+        connectionSet.remove(uuid);
+    }
 }

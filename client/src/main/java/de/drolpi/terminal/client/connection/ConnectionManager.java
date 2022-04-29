@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.client.connection;
 
-import de.drolpi.terminal.client.connection.Client;
+public class ConnectionManager {
 
-import java.io.IOException;
+    private ClientImpl client;
 
-public final class Main {
 
-    private Main() {
-        throw new UnsupportedOperationException();
-    }
 
-    public static void main(String[] args) throws IOException {
-
-    }
 }

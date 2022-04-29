@@ -22,11 +22,7 @@ import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        Server server = Server.create(8888);
-        server.registerListener((connectedClient, input) -> {
-            connectedClient.write("Back: " + input);
-        });
-        server.start();
+    public static void main(String[] args) {
+
     }
 }
