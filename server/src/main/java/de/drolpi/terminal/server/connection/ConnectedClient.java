@@ -38,11 +38,11 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
 
     private final Map<UUID, ReceiveListener> listeners = new HashMap<>();
 
-    ConnectedClient(Socket client, UUID uniqueId) throws IOException {
+    ConnectedClient(ServerImpl server, Socket client, UUID uniqueId) throws IOException {
         this.client = client;
         this.uniqueId = uniqueId;
         this.out = new PrintWriter(this.client.getOutputStream(), true);
-        ServerInputReceiveThread receiver = new ServerInputReceiveThread(this);
+        ServerInputReceiveThread receiver = new ServerInputReceiveThread(server, this);
         receiver.start();
     }
 
@@ -100,7 +100,7 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
         return this.client;
     }
 
-    public void callHandlers(String input) {
+    public void callListeners(String input) {
         for (ReceiveListener listener : this.listeners.values()) {
             listener.accept(input);
         }

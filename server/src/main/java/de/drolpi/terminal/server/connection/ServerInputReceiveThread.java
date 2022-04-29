@@ -36,7 +36,6 @@ final class ServerInputReceiveThread extends Thread {
     public void run() {
         String input;
         while (!Thread.interrupted() && (input = read()) != null) {
-            this.connectedClient.callHandlers(input);
             this.server.callListeners(connectedClient, input);
         }
     }

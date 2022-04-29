@@ -44,7 +44,7 @@ final class ServerImpl extends Thread implements Server {
             try {
                 Socket client = this.socket.accept();
                 UUID uniqueId = UUID.randomUUID();
-                ConnectedClient connection = new ConnectedClient(client, uniqueId);
+                ConnectedClient connection = new ConnectedClient(this, client, uniqueId);
                 this.connectionSet.put(uniqueId, connection);
             } catch (IOException ignored) {
 
@@ -76,6 +76,7 @@ final class ServerImpl extends Thread implements Server {
     }
 
     protected void callListeners(ConnectedClient connectedClient, String input) {
+        connectedClient.callListeners(input);
         for (ServerReceiveListener listener : this.listeners.values()) {
             listener.accept(connectedClient, input);
         }
