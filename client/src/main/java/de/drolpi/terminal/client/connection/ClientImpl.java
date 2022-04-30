@@ -30,12 +30,16 @@ import java.util.UUID;
 
 final class ClientImpl implements Client {
 
+    private final String host;
+    private final int port;
     private final Socket socket;
     private final PrintWriter out;
 
     private final Map<UUID, ReceiveListener> listeners = new HashMap<>();
 
     ClientImpl(String host, int port) throws Exception {
+        this.host = host;
+        this.port = port;
         this.socket = new Socket(host, port);
         this.out = new PrintWriter(this.socket.getOutputStream());
         ClientInputReceiveThread receiver = new ClientInputReceiveThread(this);
@@ -84,7 +88,7 @@ final class ClientImpl implements Client {
 
     @Override
     public boolean connected() {
-        return this.socket != null && this.socket.isConnected();
+        return this.socket != null && !this.socket.isClosed() && this.socket.isConnected();
     }
 
     @Override
@@ -101,5 +105,13 @@ final class ClientImpl implements Client {
         for (ReceiveListener listener : this.listeners.values()) {
             listener.accept(input);
         }
+    }
+
+    public String host() {
+        return this.host;
+    }
+
+    public int port() {
+        return this.port;
     }
 }

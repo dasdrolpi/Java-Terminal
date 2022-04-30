@@ -27,8 +27,9 @@ public final class Main {
         throw new UnsupportedOperationException();
     }
 
-    public static void main(String[] args) throws IOException {
-        AutoReconnectThread thread = new AutoReconnectThread("127.0.0.1", 8888);
+    public static void main(String[] args) throws Exception {
+        Client client = Client.create("127.0.0.1", 8888);
+        AutoReconnectThread thread = new AutoReconnectThread(client);
         thread.start();
     }
 }

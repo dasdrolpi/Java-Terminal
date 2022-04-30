@@ -21,30 +21,29 @@ public final class AutoReconnectThread extends Thread {
     private final String host;
     private final int port;
     private ClientImpl client;
-    private int tries;
 
-    public AutoReconnectThread(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public AutoReconnectThread(Client client) {
+        this.client = (ClientImpl) client;
+        this.host = this.client.host();
+        this.port = this.client.port();
     }
 
     @Override
     public void run() {
-        while (this.client != null && this.client.connected()) {
-            System.out.println("INFO: Currently connected");
+        while (!Thread.interrupted() && this.client != null && this.client.connected()) {
+            // currently connected
         }
-        System.out.println("T");
-        tries++;
+
         try {
-            System.out.println("INFO: Trying to reconnect... (" + tries + ")");
+            System.out.println("Trying to reconnect...");
             this.client = new ClientImpl(this.host, this.port);
         } catch (Exception exception) {
             try {
                 Thread.sleep(1000);
-                this.run();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        this.run();
     }
 }

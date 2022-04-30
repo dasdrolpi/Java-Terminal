@@ -22,21 +22,21 @@ import java.io.InputStreamReader;
 
 final class ClientInputReceiveThread extends Thread {
 
-    private final ClientImpl clientImpl;
+    private final ClientImpl client;
     private final BufferedReader in;
 
-    ClientInputReceiveThread(ClientImpl clientImpl) throws IOException {
-        this.clientImpl = clientImpl;
-        this.in = new BufferedReader(new InputStreamReader(clientImpl.socket().getInputStream()));
+    ClientInputReceiveThread(ClientImpl client) throws IOException {
+        this.client = client;
+        this.in = new BufferedReader(new InputStreamReader(client.socket().getInputStream()));
     }
 
     @Override
     public void run() {
         String input;
         while (!Thread.interrupted() && (input = this.read()) != null) {
-            this.clientImpl.callListeners(input);
+            this.client.callListeners(input);
         }
-        clientImpl.close();
+        client.close();
     }
 
     private String read() {

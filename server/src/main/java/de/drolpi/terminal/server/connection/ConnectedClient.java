@@ -53,7 +53,6 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
         try {
             if (!this.connected())
                 return;
-            System.out.println("Close2");
             this.out.close();
             this.client.close();
             server.removeClient(uniqueId);
