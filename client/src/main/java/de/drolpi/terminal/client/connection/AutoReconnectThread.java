@@ -17,8 +17,12 @@
 package de.drolpi.terminal.client.connection;
 
 import de.natrox.common.supplier.ThrowableSupplier;
+import de.natrox.common.validate.Check;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.function.Consumer;
 
 public final class AutoReconnectThread extends Thread {
 
@@ -27,7 +31,8 @@ public final class AutoReconnectThread extends Thread {
     private final ThrowableSupplier<Client, Exception> clientSupplier;
     private Client client;
 
-    public AutoReconnectThread(ThrowableSupplier<Client, Exception> clientSupplier) {
+    public AutoReconnectThread(@NotNull ThrowableSupplier<Client, Exception> clientSupplier) {
+        Check.notNull(clientSupplier, "clientSupplier");
         this.clientSupplier = clientSupplier;
     }
 
@@ -49,4 +54,13 @@ public final class AutoReconnectThread extends Thread {
         }
         this.run();
     }
+
+    public void execute(@NotNull Consumer<Client> consumer) {
+        Check.notNull(consumer, "consumer");
+        if (this.client == null)
+            return;
+
+        consumer.accept(this.client);
+    }
+
 }

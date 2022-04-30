@@ -27,7 +27,7 @@ public interface Connectable {
 
     void close();
 
-    void write(@NotNull String message) throws IOException;
+    void write(@NotNull String message);
 
     boolean connected();
 
