@@ -43,12 +43,26 @@ final class ServerImpl extends Thread implements Server {
         while (true) {
             try {
                 Socket client = this.socket.accept();
+                System.out.println("Client accepted");
                 UUID uniqueId = UUID.randomUUID();
                 ConnectedClient connection = new ConnectedClient(this, client, uniqueId);
                 this.connectionSet.put(uniqueId, connection);
             } catch (IOException ignored) {
 
             }
+        }
+    }
+
+    @Override
+    public void close() {
+        this.interrupt();
+        try {
+            this.socket.close();
+            for (ConnectedClient client : this.connectionSet.values()) {
+                client.close();
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 

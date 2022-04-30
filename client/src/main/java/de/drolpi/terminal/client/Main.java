@@ -16,6 +16,7 @@
 
 package de.drolpi.terminal.client;
 
+import de.drolpi.terminal.client.connection.AutoReconnectThread;
 import de.drolpi.terminal.client.connection.Client;
 
 import java.io.IOException;
@@ -27,10 +28,7 @@ public final class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        Client client = Client.create("127.0.0.1", 8888);
-        client.registerListener(input -> {
-            System.out.println("Received: " + input);
-        });
-        client.write("Test");
+        AutoReconnectThread thread = new AutoReconnectThread("127.0.0.1", 8888);
+        thread.start();
     }
 }

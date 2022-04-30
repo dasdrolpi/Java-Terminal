@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public sealed interface Client extends Connectable, ListenerRegistrable<ReceiveListener> permits ClientImpl {
 
-    static @NotNull Client create(@NotNull String host, int port) throws IOException {
+    static @NotNull Client create(@NotNull String host, int port) throws Exception {
         Check.notNull(host, "host");
         return new ClientImpl(host, port);
     }

@@ -35,7 +35,7 @@ final class ClientImpl implements Client {
 
     private final Map<UUID, ReceiveListener> listeners = new HashMap<>();
 
-    ClientImpl(String host, int port) throws IOException {
+    ClientImpl(String host, int port) throws Exception {
         this.socket = new Socket(host, port);
         this.out = new PrintWriter(this.socket.getOutputStream());
         ClientInputReceiveThread receiver = new ClientInputReceiveThread(this);

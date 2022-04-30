@@ -32,6 +32,8 @@ public sealed interface Server extends ListenerRegistrable<ServerReceiveListener
 
     void start();
 
+    void close();
+
     @NotNull ServerSocket socket();
 
     @NotNull Set<UUID> listeners();

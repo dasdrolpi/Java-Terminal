@@ -44,7 +44,6 @@ final class ServerInputReceiveThread extends Thread {
         try {
             return this.in.readLine();
         } catch (IOException e) {
-            e.printStackTrace();
             return null;
         }
     }
