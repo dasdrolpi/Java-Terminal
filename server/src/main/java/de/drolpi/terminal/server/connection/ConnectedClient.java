@@ -33,17 +33,17 @@ import java.util.UUID;
 public final class ConnectedClient implements Connectable, ListenerRegistrable<ReceiveListener> {
 
     private final UUID uniqueId;
-    private final Socket client;
+    private final Socket socket;
     private final PrintWriter out;
     private final ServerImpl server;
 
     private final Map<UUID, ReceiveListener> listeners = new HashMap<>();
 
-    ConnectedClient(ServerImpl server, Socket client, UUID uniqueId) throws IOException {
-        this.client = client;
+    ConnectedClient(ServerImpl server, Socket socket, UUID uniqueId) throws IOException {
+        this.socket = socket;
         this.uniqueId = uniqueId;
         this.server = server;
-        this.out = new PrintWriter(this.client.getOutputStream(), true);
+        this.out = new PrintWriter(this.socket.getOutputStream(), true);
         ServerInputReceiveThread receiver = new ServerInputReceiveThread(server, this);
         receiver.start();
     }
@@ -54,7 +54,7 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
             if (!this.connected())
                 return;
             this.out.close();
-            this.client.close();
+            this.socket.close();
             server.removeClient(uniqueId);
         } catch (Exception ignored) {
 
@@ -90,7 +90,7 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
 
     @Override
     public boolean connected() {
-        return this.client.isConnected();
+        return this.socket != null && !this.socket.isClosed() && this.socket.isConnected();
     }
 
     @Override
@@ -100,7 +100,7 @@ public final class ConnectedClient implements Connectable, ListenerRegistrable<R
 
     @Override
     public @NotNull Socket socket() {
-        return this.client;
+        return this.socket;
     }
 
     public void callListeners(String input) {
