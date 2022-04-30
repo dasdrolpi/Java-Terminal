@@ -28,8 +28,7 @@ public final class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        Client client = Client.create("127.0.0.1", 8888);
-        AutoReconnectThread thread = new AutoReconnectThread(client);
+        AutoReconnectThread thread = new AutoReconnectThread(() -> Client.create("127.0.0.1", 8888));
         thread.start();
     }
 }

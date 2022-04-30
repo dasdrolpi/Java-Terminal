@@ -16,16 +16,19 @@
 
 package de.drolpi.terminal.client.connection;
 
+import de.natrox.common.supplier.ThrowableSupplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class AutoReconnectThread extends Thread {
 
-    private final String host;
-    private final int port;
-    private ClientImpl client;
+    private final static Logger LOGGER = LoggerFactory.getLogger(AutoReconnectThread.class);
 
-    public AutoReconnectThread(Client client) {
-        this.client = (ClientImpl) client;
-        this.host = this.client.host();
-        this.port = this.client.port();
+    private final ThrowableSupplier<Client, Exception> clientSupplier;
+    private Client client;
+
+    public AutoReconnectThread(ThrowableSupplier<Client, Exception> clientSupplier) {
+        this.clientSupplier = clientSupplier;
     }
 
     @Override
@@ -35,11 +38,11 @@ public final class AutoReconnectThread extends Thread {
         }
 
         try {
-            System.out.println("Trying to reconnect...");
-            this.client = new ClientImpl(this.host, this.port);
+            LOGGER.debug("Connecting...");
+            this.client = clientSupplier.get();
         } catch (Exception exception) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -17,30 +17,13 @@
 package de.drolpi.terminal.server;
 
 import de.drolpi.terminal.server.connection.Server;
-import de.natrox.common.scheduler.Scheduler;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         Server server = Server.create(8888);
-        server.registerListener((connectedClient, input) -> {
-            connectedClient.write("Back: " + input);
-        });
         server.start();
-
-        Scheduler scheduler = Scheduler.create();
-
-        scheduler
-            .buildTask(() -> {
-                System.out.println("Close");
-                server.close();
-                System.exit(-1);
-            })
-            .delay(Duration.of(10, ChronoUnit.SECONDS))
-            .schedule();
     }
 }

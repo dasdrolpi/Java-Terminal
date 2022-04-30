@@ -18,6 +18,8 @@ package de.drolpi.terminal.server.connection;
 
 import de.natrox.common.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -28,6 +30,8 @@ import java.util.Set;
 import java.util.UUID;
 
 final class ServerImpl extends Thread implements Server {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ServerImpl.class);
 
     private final ServerSocket socket;
 
@@ -43,7 +47,8 @@ final class ServerImpl extends Thread implements Server {
         while (true) {
             try {
                 Socket client = this.socket.accept();
-                System.out.println("Client accepted");
+                LOGGER.debug("Client accepted" + socket.getInetAddress().getHostName());
+
                 UUID uniqueId = UUID.randomUUID();
                 ConnectedClient connection = new ConnectedClient(this, client, uniqueId);
                 this.connectionSet.put(uniqueId, connection);
