@@ -32,14 +32,21 @@ final class ClientImpl implements Client {
 
     private final String host;
     private final int port;
-    private final Socket socket;
-    private final PrintWriter out;
-
     private final Map<UUID, ReceiveListener> listeners = new HashMap<>();
 
-    ClientImpl(String host, int port) throws Exception {
+    private Socket socket;
+    private PrintWriter out;
+
+    ClientImpl(String host, int port) {
         this.host = host;
         this.port = port;
+        this.socket = new Socket();
+    }
+
+    @Override
+    public void connect() throws IOException {
+        if (this.connected())
+            return;
         this.socket = new Socket(host, port);
         this.out = new PrintWriter(this.socket.getOutputStream());
         ClientInputReceiveThread receiver = new ClientInputReceiveThread(this);
@@ -53,9 +60,9 @@ final class ClientImpl implements Client {
                 return;
             this.out.close();
             this.socket.close();
-
-        } catch (Exception ignored) {
-
+            this.socket = null;
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 

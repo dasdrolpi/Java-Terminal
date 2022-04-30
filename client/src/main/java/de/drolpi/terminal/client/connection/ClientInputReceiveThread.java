@@ -36,7 +36,8 @@ final class ClientInputReceiveThread extends Thread {
         while (!Thread.interrupted() && (input = this.read()) != null) {
             this.client.callListeners(input);
         }
-        client.close();
+        this.client.close();
+        this.interrupt();
     }
 
     private String read() {

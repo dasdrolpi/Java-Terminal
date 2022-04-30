@@ -36,7 +36,7 @@ public final class TerminalClient implements Startable, Shutdownable {
 
     @Override
     public void start() {
-        AutoReconnectThread thread = new AutoReconnectThread(() -> Client.create("127.0.0.1", 8888));
+        AutoReconnectThread thread = new AutoReconnectThread(Client.create("127.0.0.1", 8888));
         thread.start();
     }
 
