@@ -16,10 +16,8 @@
 
 package de.drolpi.terminal.client;
 
-import de.drolpi.terminal.client.connection.AutoReconnectThread;
-import de.drolpi.terminal.client.connection.Client;
-
-import java.io.IOException;
+import de.natrox.console.Console;
+import de.natrox.console.jline3.JLine3Console;
 
 public final class Main {
 
@@ -28,7 +26,14 @@ public final class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        AutoReconnectThread thread = new AutoReconnectThread(() -> Client.create("127.0.0.1", 8888));
-        thread.start();
+        Console console = JLine3Console
+            .builder()
+            .prompt(() -> "> ")
+            .build();
+
+        //TODO: Logger and stuff
+
+        TerminalClient client = new TerminalClient(console);
+        client.start();
     }
 }
