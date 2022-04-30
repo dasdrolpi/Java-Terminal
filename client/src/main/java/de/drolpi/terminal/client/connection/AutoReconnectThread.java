@@ -25,10 +25,17 @@ public final class AutoReconnectThread extends Thread {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AutoReconnectThread.class);
     private final Client client;
+    private final long reconnectCoolDown;
+
+    public AutoReconnectThread(@NotNull Client client, long reconnectCoolDown) {
+        Check.notNull(client, "client");
+        Check.argCondition(reconnectCoolDown >= 0, "reconnectCoolDown must be positive or equal to zero");
+        this.client = client;
+        this.reconnectCoolDown = reconnectCoolDown;
+    }
 
     public AutoReconnectThread(@NotNull Client client) {
-        Check.notNull(client, "client");
-        this.client = client;
+        this(client, 5000);
     }
 
     @Override
