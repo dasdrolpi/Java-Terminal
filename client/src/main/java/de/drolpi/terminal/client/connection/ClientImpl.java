@@ -49,6 +49,7 @@ final class ClientImpl implements Client {
                 return;
             this.out.close();
             this.socket.close();
+
         } catch (Exception ignored) {
 
         }
