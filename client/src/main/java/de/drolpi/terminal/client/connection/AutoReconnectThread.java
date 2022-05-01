@@ -40,20 +40,21 @@ public final class AutoReconnectThread extends Thread {
 
     @Override
     public void run() {
-        while (!Thread.interrupted() && this.client.connected()) {
-            // currently connected
-        }
+        while(!Thread.interrupted()) {
+            while (this.client.connected()) {
+                // currently connected
+            }
 
-        try {
-            LOGGER.debug("Connecting...");
-            this.client.connect();
-        } catch (Exception exception) {
             try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.debug("Connecting...");
+                this.client.connect();
+            } catch (Exception exception) {
+                try {
+                    Thread.sleep(reconnectCoolDown);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        this.run();
     }
 }
