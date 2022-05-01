@@ -14,26 +14,9 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.server.connection;
 
-import de.natrox.console.Console;
-import de.natrox.console.jline3.JLine3Console;
+import java.util.function.BiConsumer;
 
-public final class Main {
-
-    private Main() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) throws Exception {
-        Console console = JLine3Console
-            .builder()
-            .prompt(() -> "> ")
-            .build();
-
-        //TODO: Logger and stuff
-
-        TerminalClient client = new TerminalClient(console);
-        client.start();
-    }
+public interface ServerReceiveListener extends BiConsumer<ConnectedClient, String> {
 }

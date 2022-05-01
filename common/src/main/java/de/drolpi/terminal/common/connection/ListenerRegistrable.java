@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.common.connection;
 
-import de.natrox.console.Console;
-import de.natrox.console.jline3.JLine3Console;
+import de.natrox.common.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
-public final class Main {
+import java.util.UUID;
 
-    private Main() {
-        throw new UnsupportedOperationException();
+public interface ListenerRegistrable<T> {
+
+    void registerListener(@NotNull UUID uniqueId, @NotNull T listener);
+
+    default @NotNull UUID registerListener(@NotNull T listener) {
+        Check.notNull(listener, "listener");
+        UUID uniqueId = UUID.randomUUID();
+        this.registerListener(uniqueId, listener);
+        return uniqueId;
     }
 
-    public static void main(String[] args) throws Exception {
-        Console console = JLine3Console
-            .builder()
-            .prompt(() -> "> ")
-            .build();
+    void unregisterListener(@NotNull UUID uniqueId);
 
-        //TODO: Logger and stuff
-
-        TerminalClient client = new TerminalClient(console);
-        client.start();
-    }
 }

@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.common.connection;
 
-import de.natrox.console.Console;
-import de.natrox.console.jline3.JLine3Console;
+import org.jetbrains.annotations.NotNull;
 
-public final class Main {
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Set;
+import java.util.UUID;
 
-    private Main() {
-        throw new UnsupportedOperationException();
-    }
+public interface Connectable {
 
-    public static void main(String[] args) throws Exception {
-        Console console = JLine3Console
-            .builder()
-            .prompt(() -> "> ")
-            .build();
+    void close();
 
-        //TODO: Logger and stuff
+    void write(@NotNull String message);
 
-        TerminalClient client = new TerminalClient(console);
-        client.start();
-    }
+    boolean connected();
+
+    @NotNull Socket socket();
+
+    @NotNull Set<UUID> listeners();
+
 }

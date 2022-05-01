@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.server;
+package de.drolpi.terminal.client.connection;
 
-import de.drolpi.terminal.server.connection.Server;
+import de.drolpi.terminal.common.connection.Connectable;
+import de.drolpi.terminal.common.connection.ListenerRegistrable;
+import de.drolpi.terminal.common.connection.ReceiveListener;
+import de.natrox.common.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public class Main {
+public sealed interface Client extends Connectable, ListenerRegistrable<ReceiveListener> permits ClientImpl {
 
-    public static void main(String[] args) throws IOException {
-        Server server = Server.create(8888);
-        server.start();
+    static @NotNull Client create(@NotNull String host, int port) {
+        Check.notNull(host, "host");
+        return new ClientImpl(host, port);
     }
+
+    void connect() throws IOException;
+
 }

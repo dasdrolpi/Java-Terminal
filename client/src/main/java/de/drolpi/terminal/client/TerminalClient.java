@@ -16,6 +16,8 @@
 
 package de.drolpi.terminal.client;
 
+import de.drolpi.terminal.client.connection.AutoReconnectThread;
+import de.drolpi.terminal.client.connection.Client;
 import de.natrox.common.Shutdownable;
 import de.natrox.common.Startable;
 import de.natrox.console.Console;
@@ -26,7 +28,7 @@ public final class TerminalClient implements Startable, Shutdownable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TerminalClient.class);
 
-    protected final Console console;
+    private final Console console;
 
     protected TerminalClient(Console console) {
         this.console = console;
@@ -34,7 +36,8 @@ public final class TerminalClient implements Startable, Shutdownable {
 
     @Override
     public void start() {
-
+        AutoReconnectThread thread = new AutoReconnectThread(Client.create("127.0.0.1", 8888));
+        thread.start();
     }
 
     @Override

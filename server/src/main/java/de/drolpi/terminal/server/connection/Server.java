@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package de.drolpi.terminal.client;
+package de.drolpi.terminal.server.connection;
 
-import de.natrox.console.Console;
-import de.natrox.console.jline3.JLine3Console;
+import de.drolpi.terminal.common.connection.ListenerRegistrable;
+import org.jetbrains.annotations.NotNull;
 
-public final class Main {
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.Set;
+import java.util.UUID;
 
-    private Main() {
-        throw new UnsupportedOperationException();
+public sealed interface Server extends ListenerRegistrable<ServerReceiveListener> permits ServerImpl {
+
+    static @NotNull Server create(int port) throws IOException {
+        return new ServerImpl(port);
     }
 
-    public static void main(String[] args) throws Exception {
-        Console console = JLine3Console
-            .builder()
-            .prompt(() -> "> ")
-            .build();
+    void start();
 
-        //TODO: Logger and stuff
+    void close();
 
-        TerminalClient client = new TerminalClient(console);
-        client.start();
-    }
+    @NotNull ServerSocket socket();
+
+    @NotNull Set<UUID> listeners();
+
 }
